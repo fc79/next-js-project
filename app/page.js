@@ -4,9 +4,9 @@ export default function Home(){
     return(
         <main>
             <div className="container">
-                <h1>آزمونک</h1>
+                <h1 className="padd-b-10">آزمونک</h1>
                 <Link href="/quiz">
-                    <button>برو به آزمون</button>
+                    <button className="btn">برو به آزمون</button>
                 </Link>
             </div>
         </main>
