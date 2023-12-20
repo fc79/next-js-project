@@ -1,18 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 import { quiz }  from "../data";
+import Loading from "./loading";
 export default function Page(){
-    console.log("q", quiz.questions)
     const [activeQuestion, setActiveQuestion] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState("");
     const [checked, setChecked] = useState(false);
     const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
     const [showResult, setShowResult] = useState(false);
+    const [answers, setAnswers] = useState([]);
+    const [correctAnswer, setCorrectAnswer] = useState("");
     const [result, setResutl] = useState({
         score: 0, correctAnswer:0, wrongAnswer: 0 });
     const { questions } = quiz;
-    const { answers, correctAnswer } = questions[activeQuestion];
-
+    // const { answers, correctAnswer } = questions[activeQuestion];
+    useEffect(()=>{
+     setTimeout(()=>{
+        setAnswers(questions[activeQuestion].answers)
+        setCorrectAnswer(questions[activeQuestion].correctAnswer)
+     }, 2000)
+    }, [result])
+    console.log("r", answers )
     const onAnswerSelected = (answer, index) =>{
         setChecked(true);
         setSelectedAnswerIndex(index);
@@ -30,6 +39,8 @@ export default function Page(){
         {...prev, wrongAnswer: prev.wrongAnswer + 1});
         if( activeQuestion !== questions.length - 1){
             setActiveQuestion(prev => prev + 1);
+            setCorrectAnswer("");
+            setAnswers([])
         }
         else {
             setActiveQuestion(0);
@@ -53,12 +64,20 @@ export default function Page(){
                         <h3>
                           {questions[activeQuestion].question}
                         </h3>
-                        {answers.map((answer, index)=>(
-                            <li key={index} onClick={()=> onAnswerSelected(answer, index)}
-                             className={selectedAnswerIndex === index ? "li-selected" : "li-hover"}>
-                                <span>{answer}</span>
-                             </li>
-                        ))}
+                        {answers.length > 0 ? (
+                         answers.map((answer, index)=>(
+                          <li key={index} onClick={()=> onAnswerSelected(answer, index)}
+                           className={selectedAnswerIndex === index ? "li-selected" : "li"}>
+                           <span>{answer}</span>
+                         </li>
+                        ))
+                        ) : (
+                            <li>
+                           <Loading count={4} />
+
+                            </li>
+                        )}
+                        
                         {
                             checked ? (
                                 <button className="btn" onClick={nextQuestion}>

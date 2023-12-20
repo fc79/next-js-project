@@ -1,6 +1,6 @@
-import { Vazirmatn } from 'next/font/google'
-import './globals.css'
-
+import { Vazirmatn } from 'next/font/google';
+import './globals.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 import localFont from "next/font/local"
 // const vazir = Vazirmatn({
 //   subsets:["arabic", "latin"],
