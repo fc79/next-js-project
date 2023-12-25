@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Skeleton from "react-loading-skeleton";
 import { quiz }  from "../data";
 import Loading from "./loading";
@@ -16,11 +16,20 @@ export default function Page(){
     const { questions } = quiz;
     // const { answers, correctAnswer } = questions[activeQuestion];
     useEffect(()=>{
-     setTimeout(()=>{
+     getData()
+    }, [result]);
+
+    function getData(){
         setAnswers(questions[activeQuestion].answers)
         setCorrectAnswer(questions[activeQuestion].correctAnswer)
-     }, 2000)
-    }, [result])
+    }
+    async function timeDelay(){
+        const delay = 1 + Math.floor(Math.random()*5);
+        await timeout(delay * 1000)
+    }
+    function timeout(delay){
+        return new Promise(time => setTimeout(time, delay))
+    }
     console.log("r", answers )
     const onAnswerSelected = (answer, index) =>{
         setChecked(true);
@@ -64,19 +73,15 @@ export default function Page(){
                         <h3>
                           {questions[activeQuestion].question}
                         </h3>
-                        {answers.length > 0 ? (
-                         answers.map((answer, index)=>(
+                         {answers.map((answer, index)=>(
                           <li key={index} onClick={()=> onAnswerSelected(answer, index)}
                            className={selectedAnswerIndex === index ? "li-selected" : "li"}>
-                           <span>{answer}</span>
+                           <Suspense fallback={<Loading count={1} />}>
+                               <span>{timeDelay().then(()=> answer)}</span>
+                           </Suspense>
                          </li>
-                        ))
-                        ) : (
-                            <li>
-                           <Loading count={4} />
-
-                            </li>
-                        )}
+                        ))}
+                        
                         
                         {
                             checked ? (
