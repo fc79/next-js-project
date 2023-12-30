@@ -59,7 +59,7 @@ export default function Page(){
     }
     // throw new Error;
     return(
-        <div className="container">
+        <>
             <h1>صفحه آزمون</h1>
             <div>{!showResult ?(
                 <h2>
@@ -110,6 +110,6 @@ export default function Page(){
                     </div>
                 )}
             </div>
-        </div>
+        </>
     )
 }
