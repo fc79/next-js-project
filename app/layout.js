@@ -17,6 +17,7 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  // throw new Error(); => os a bug in Next
   return (
     <html lang="fa-IR" dir='rtl' className={vazir.className}>
       <body >{children}</body>

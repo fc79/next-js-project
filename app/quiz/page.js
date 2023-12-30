@@ -9,27 +9,27 @@ export default function Page(){
     const [checked, setChecked] = useState(false);
     const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
     const [showResult, setShowResult] = useState(false);
-    const [answers, setAnswers] = useState([]);
-    const [correctAnswer, setCorrectAnswer] = useState("");
+    // const [answers, setAnswers] = useState([]);
+    // const [correctAnswer, setCorrectAnswer] = useState("");
     const [result, setResutl] = useState({
         score: 0, correctAnswer:0, wrongAnswer: 0 });
     const { questions } = quiz;
-    // const { answers, correctAnswer } = questions[activeQuestion];
-    useEffect(()=>{
-     getData()
-    }, [result]);
+    const { answers, correctAnswer } = questions[activeQuestion];
+    // useEffect(()=>{
+    //  getData()
+    // }, [result]);
 
-    function getData(){
-        setAnswers(questions[activeQuestion].answers)
-        setCorrectAnswer(questions[activeQuestion].correctAnswer)
-    }
-    async function timeDelay(){
-        const delay = 1 + Math.floor(Math.random()*5);
-        await timeout(delay * 1000)
-    }
-    function timeout(delay){
-        return new Promise(time => setTimeout(time, delay))
-    }
+    // function getData(){
+    //     setAnswers(questions[activeQuestion].answers)
+    //     setCorrectAnswer(questions[activeQuestion].correctAnswer)
+    // }
+    // async function timeDelay(){
+    //     const delay = 1 + Math.floor(Math.random()*5);
+    //     await timeout(delay * 1000)
+    // }
+    // function timeout(delay){
+    //     return new Promise(time => setTimeout(time, delay))
+    // }
     console.log("r", answers )
     const onAnswerSelected = (answer, index) =>{
         setChecked(true);
@@ -48,8 +48,8 @@ export default function Page(){
         {...prev, wrongAnswer: prev.wrongAnswer + 1});
         if( activeQuestion !== questions.length - 1){
             setActiveQuestion(prev => prev + 1);
-            setCorrectAnswer("");
-            setAnswers([])
+            // setCorrectAnswer("");
+            // setAnswers([])
         }
         else {
             setActiveQuestion(0);
@@ -57,6 +57,7 @@ export default function Page(){
         }
         setChecked(false);
     }
+    // throw new Error;
     return(
         <div className="container">
             <h1>صفحه آزمون</h1>
@@ -77,7 +78,7 @@ export default function Page(){
                           <li key={index} onClick={()=> onAnswerSelected(answer, index)}
                            className={selectedAnswerIndex === index ? "li-selected" : "li"}>
                            <Suspense fallback={<Loading count={1} />}>
-                               <span>{timeDelay().then(()=> answer)}</span>
+                               <span>{answer}</span>
                            </Suspense>
                          </li>
                         ))}
