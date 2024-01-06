@@ -1,9 +1,8 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
-import Skeleton from "react-loading-skeleton";
+import { useState } from "react";
 import { quiz }  from "../data";
-import Loading from "./loading";
-export default function Page(){
+import { Result, Buttons, Answers } from "./components"
+export default function Quiz(){
     const [activeQuestion, setActiveQuestion] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState("");
     const [checked, setChecked] = useState(false);
@@ -74,40 +73,12 @@ export default function Page(){
                         <h3>
                           {questions[activeQuestion].question}
                         </h3>
-                         {answers.map((answer, index)=>(
-                          <li key={index} onClick={()=> onAnswerSelected(answer, index)}
-                           className={selectedAnswerIndex === index ? "li-selected" : "li"}>
-                           <Suspense fallback={<Loading count={1} />}>
-                               <span>{answer}</span>
-                           </Suspense>
-                         </li>
-                        ))}
-                        
-                        
-                        {
-                            checked ? (
-                                <button className="btn" onClick={nextQuestion}>
-                                   {activeQuestion === questions.length - 1 ? " پایان" : "بعدی"}
-                                </button>
-                            ) : (
-                                <button className="btn-disabled" onClick={()=> nextQuestion} disabled>
-                                   {activeQuestion === questions.length - 1 ? " پایان" : "بعدی"}
-                                 </button>
-                            )
-                        }
+                        <Answers  answers={answers} onAnswerSelected={onAnswerSelected} selectedAnswerIndex={selectedAnswerIndex}/>
+                        <Buttons checked={checked} nextQuestion={nextQuestion}
+                        activeQuestion={activeQuestion} questions={questions} />
                     </div>
                 ): (
-                    <div className="quiz-container">
-                         <h3>نتایج</h3>
-                         <h3>به‌طور کلی %{(result.score / 25) * 100} سوالات جواب داده شده‌اند.</h3>
-                         <div className="results">
-                          <p>کل سوالات: {questions.length}</p>
-                          <p>کل امتیاز: {result.score}</p>
-                          <p>سوالات درست: {result.correctAnswer}</p>
-                          <p className="padd-b-10 ">سوالات غلط: {result.wrongAnswer}</p>
-                        </div>
-                        <button className="btn" onClick={()=> window.location.reload()}>شروع مجدد آزمون</button>
-                    </div>
+                    <Result result={result} questions={questions} />
                 )}
             </div>
         </>
